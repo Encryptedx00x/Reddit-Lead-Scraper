@@ -49,6 +49,8 @@ python reddit_lead_scraper.py `
 
 O CSV escapa valores que planilhas poderiam interpretar como fórmulas. JSON/CSV incluem apenas ID do post, comunidade, título, permalink, data, pontuação, termos encontrados e relevância; não salvam nome do autor nem o corpo completo. Observe as regras de uso, privacidade e retenção de dados aplicáveis ao seu acordo com o Reddit.
 
+O escape do CSV também cobre a célula de termos encontrados após a junção. Datas não finitas ou futuras são descartadas. Falhas de preparação ou paginação encerram a coleta com erro, sem apresentar uma coleta parcial como sucesso; a mensagem pública mostra contexto e classe da falha, sem copiar texto bruto de exceções que poderia conter credenciais.
+
 Exemplo sintético (não são dados reais do Reddit):
 
 ```json
@@ -73,6 +75,8 @@ python -m unittest discover -s tests -v
 ```
 
 Os testes usam posts sintéticos e um cliente mockado. Não fazem chamadas externas e não requerem credenciais.
+
+A auditoria final passou em 21 testes e também construiu o cliente PRAW real com dados sintéticos e HTTP bloqueado, verificando `read_only`. Isso comprova configuração local, não autenticação, permissões ou acesso real à API. Evidências em `docs/recovery/02-final-audit.md`.
 
 ## Escopo e limitações
 

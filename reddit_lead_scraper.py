@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import os
 import re
 import sys
@@ -108,7 +109,10 @@ def collect_leads(
     query_limit = min(max_results, MAX_PER_QUERY)
 
     for community in selected_communities:
-        subreddit = reddit.subreddit(community)
+        try:
+            subreddit = reddit.subreddit(community)
+        except Exception as exc:
+            raise RedditClientError(f"Falha ao preparar r/{community} ({type(exc).__name__}).") from exc
         for keyword in selected_keywords:
             try:
                 results = subreddit.search(
@@ -125,7 +129,7 @@ def collect_leads(
                         created = float(submission.created_utc)
                     except (AttributeError, TypeError, ValueError):
                         continue
-                    if not post_id or not title or created < cutoff:
+                    if not post_id or not title or not math.isfinite(created) or not cutoff <= created <= current.timestamp():
                         continue
                     matches = _matches(f"{title} {body}", selected_keywords)
                     if len(matches) < min_matches or post_id in posts:
@@ -133,7 +137,7 @@ def collect_leads(
                     score = getattr(submission, "score", 0)
                     try:
                         score = int(score)
-                    except (TypeError, ValueError):
+                    except (TypeError, ValueError, OverflowError):
                         score = 0
                     permalink = str(getattr(submission, "permalink", "") or "")
                     if permalink.startswith("/"):
@@ -151,7 +155,7 @@ def collect_leads(
                     )
             except Exception as exc:
                 raise RedditClientError(
-                    f"Falha na busca em r/{community} para {keyword!r}: {exc}"
+                    f"Falha na busca em r/{community} para {keyword!r} ({type(exc).__name__})."
                 ) from exc
             if len(posts) >= max_results:
                 break
@@ -211,7 +215,7 @@ def export_leads(leads: Iterable[Lead], output: Path, format_name: str) -> int:
             writer.writeheader()
             for row in rows:
                 writer.writerow({
-                    key: ", ".join(value) if key == "matched_keywords" else _spreadsheet_safe(value)
+                    key: _spreadsheet_safe(", ".join(value) if key == "matched_keywords" else value)
                     for key, value in row.items()
                 })
     else:
