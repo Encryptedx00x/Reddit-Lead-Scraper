@@ -16,3 +16,5 @@ References reviewed 2026-11-04:
 - Reddit [Developer Terms](https://redditinc.com/policies/developer-terms)
 - Reddit [Responsible Builder Policy](https://support.reddithelp.com/hc/en-us/articles/42728983564564-Responsible-Builder-Policy)
 - PRAW [`Subreddit.search`](https://praw.readthedocs.io/en/stable/code_overview/models/subreddit.html)
+
+PR checkpoint: https://github.com/Encryptedx00x/Reddit-Lead-Scraper/pull/1 (rascunho aberto e mergeável). Commit: db768f6bb0e7558cae4f518991d1aaba81d09b44.
