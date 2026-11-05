@@ -1,0 +1,10 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+reddit_leads.json
+reddit_leads.csv
+leads_queue.json
+approval_queue.json
+approved_posts.json

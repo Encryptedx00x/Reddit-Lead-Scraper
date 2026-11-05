@@ -38,7 +38,7 @@ def approve_item(index):
     if not APPROVAL_QUEUE.exists():
         return "❌ Fila vazia."
     queue = json.loads(APPROVAL_QUEUE.read_text())
-    if index >= len(queue):
+    if index < 0 or index >= len(queue):
         return "❌ Índice inválido."
     item = queue.pop(index)
     item["status"] = "approved"
@@ -56,7 +56,7 @@ def reject_item(index):
     if not APPROVAL_QUEUE.exists():
         return "❌ Fila vazia."
     queue = json.loads(APPROVAL_QUEUE.read_text())
-    if index >= len(queue):
+    if index < 0 or index >= len(queue):
         return "❌ Índice inválido."
     queue.pop(index)
     APPROVAL_QUEUE.write_text(json.dumps(queue, indent=2))
