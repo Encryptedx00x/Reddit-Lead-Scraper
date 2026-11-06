@@ -21,3 +21,7 @@ Revisado contra `origin/main`; commit `ab81904` preservado.
 ## Decisão
 
 **GO para merge da CLI com ressalva de integração externa**. Autenticação real, permissões concedidas, limites/quota e comportamento do servidor Reddit não foram homologados. Continuam pendentes credenciais e evidência das aprovações aplicáveis. O wrapper OpenClaw legado continua fora do fluxo suportado; não é integração de outreach validada. PR permanece draft.
+
+## Preparação para integração
+
+O CI executa os testes com dados sintéticos, sem credenciais ou acesso à API Reddit. A integração real continua não homologada.
